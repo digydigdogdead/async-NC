@@ -1,4 +1,6 @@
-﻿using System.Diagnostics;
+﻿using ASync;
+using System.Diagnostics;
+using System.Numerics;
 
 internal class Program
 {
@@ -48,25 +50,22 @@ internal class Program
             {
                 _cancelTasks.Dispose();
             }
-
-            /*private void DoStuff()
-            {
-                _cancelTasks = new CancellationTokenSource();
-
-                var task = new Task(() => { *//* your actions here *//* }, _cancelTasks.Token);
-                task.Start();
-
-                if (!task.Wait(5000)) _cancelTasks.Cancel();
-            }*/
-            
-
-            
-
-
-
-
         }
 
-        await SayHelloAndWorld();
+        //await SayHelloAndWorld();
+
+        List<BigInteger> bigInts = Exercises.GetBigInts();
+
+        List<Task> allTasks = new List<Task>();
+
+        foreach (BigInteger bigInt in bigInts)
+        {
+            allTasks.Add(new Task(() =>
+            { BigInteger result = Exercises.CalculateFactorial(bigInt);
+                Console.WriteLine(result);
+            }));
+        }
+
+        await Task.Run(() => allTasks[0]);
     }
 }
