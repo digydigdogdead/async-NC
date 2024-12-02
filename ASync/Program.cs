@@ -1,5 +1,4 @@
 ﻿using ASync;
-using ASync.Resources;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Numerics;

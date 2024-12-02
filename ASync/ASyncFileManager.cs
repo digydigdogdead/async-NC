@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ASync.Resources
+namespace ASync
 {
     internal class ASyncFileManager
     {
@@ -14,6 +14,11 @@ namespace ASync.Resources
         {
             string result = await File.ReadAllTextAsync(path);
             return result;
+        }
+
+        async public static void WriteFile(string path, string input)
+        {
+            await File.WriteAllTextAsync(path, input);
         }
     }
 }
