@@ -1,4 +1,5 @@
 ﻿using ASync;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Numerics;
 using System.Runtime.CompilerServices;
@@ -78,53 +79,36 @@ internal class Program
             }));
         }
 
-        /*static Task CalculateFactorialAsync(BigInteger bigInteger)
+        string story = "Mary had a little lamb, its fleece was white as snow.";
+        string[] storyArray = story.Split(' ');
+
+
+        var tellAStory = Task.Run(async () =>
         {
-            var result = Task.Run(() =>
+            foreach (var word in storyArray)
             {
-                Exercises.CalculateFactorial(bigInteger);
-            });
-            return result;
-        }
+                Console.WriteLine(word);
+                await Task.Delay(1000);
+            }
+        });
 
-
-        foreach (BigInteger bigInteger in bigInts)
+        var printFactorials = Task.Run(async () =>
         {
-            var task1 = CalculateFactorialAsync(bigInteger);
-            
-        }*/
-
-
-
-        await Task
-            .WhenAll(allTasks)
-            .ContinueWith(x =>
-            {
-                foreach (BigInteger result in x.Result)
+            await Task
+                .WhenAll(allTasks)
+                .ContinueWith(x =>
                 {
-                    Console.WriteLine(result);
-                }
-            });
+                    foreach (BigInteger result in x.Result)
+                    {
+                        Console.WriteLine(result);
+                    }
+                });
+        });
 
-        /*foreach (var num in combined)
-        {
-            Console.WriteLine(num);
-        }*/
-        /*
-        await result1 = Exercises.CalculateFactorial(bigInts[0])
-        await result2 = ...
+        await Task.WhenAll([tellAStory, printFactorials]);
 
-        1-----
-        2-----
-        3-----
-        4---------
-        5---------
-        6----------------
-        7------------------------(<-)
-        8----------------
-        9---------
         
-         */
+
 
 
     }
