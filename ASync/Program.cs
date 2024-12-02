@@ -1,4 +1,5 @@
 ﻿using ASync;
+using ASync.Resources;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Numerics;
@@ -57,57 +58,50 @@ internal class Program
 
         //await SayHelloAndWorld();
 
-        List<BigInteger> bigInts = Exercises.GetBigInts();
+        /*        List<BigInteger> bigInts = Exercises.GetBigInts();
 
-        List<Task<BigInteger>> allTasks = new();
+                List<Task<BigInteger>> allTasks = new();
 
-        foreach (BigInteger bigInt in bigInts)
-        {
-            /*allTasks.Add(new Task(() =>
-            {
-                BigInteger result = Exercises
-                .CalculateFactorial(new BigInteger(24672));
-
-                Console.WriteLine(result);
-            }));*/
-            allTasks.Add(Task.Run(() =>
-            {
-                BigInteger result = Exercises
-                .CalculateFactorial(bigInt);
-
-                return result;
-            }));
-        }
-
-        string story = "Mary had a little lamb, its fleece was white as snow.";
-        string[] storyArray = story.Split(' ');
-
-
-        var tellAStory = Task.Run(async () =>
-        {
-            foreach (var word in storyArray)
-            {
-                Console.WriteLine(word);
-                await Task.Delay(1000);
-            }
-        });
-
-        var printFactorials = Task.Run(async () =>
-        {
-            await Task
-                .WhenAll(allTasks)
-                .ContinueWith(x =>
+                foreach (BigInteger bigInt in bigInts)
                 {
-                    foreach (BigInteger result in x.Result)
+                    allTasks.Add(Task.Run(() =>
                     {
-                        Console.WriteLine(result);
+                        BigInteger result = Exercises
+                        .CalculateFactorial(bigInt);
+
+                        return result;
+                    }));
+                }
+
+                string story = "Mary had a little lamb, its fleece was white as snow.";
+                string[] storyArray = story.Split(' ');
+
+
+                var tellAStory = Task.Run(async () =>
+                {
+                    foreach (var word in storyArray)
+                    {
+                        Console.WriteLine(word);
+                        await Task.Delay(1000);
                     }
                 });
-        });
 
-        await Task.WhenAll([tellAStory, printFactorials]);
+                var printFactorials = Task.Run(async () =>
+                {
+                    await Task
+                        .WhenAll(allTasks)
+                        .ContinueWith(x =>
+                        {
+                            foreach (BigInteger result in x.Result)
+                            {
+                                Console.WriteLine(result);
+                            }
+                        });
+                });
 
-        
+                await Task.WhenAll([tellAStory, printFactorials]);*/
+
+        Console.WriteLine(ASyncFileManager.ReadFile("Resources/SuperSecretFile.txt").Result);
 
 
 
