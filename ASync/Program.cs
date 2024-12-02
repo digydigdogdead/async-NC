@@ -11,6 +11,7 @@ internal class Program
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
 
+
             var sayHello = Task.Run(async () =>
             {
                 await Task.Delay(new Random().Next(1000, 10001));
@@ -25,18 +26,28 @@ internal class Program
             },
             _cancelTasks.Token);
 
-            
-            
+                        
             try
             {
+                if (!Task.WaitAll([sayHello, sayWorld], 5000))
+                {
+                    _cancelTasks.Cancel();
+                }
+                _cancelTasks.Token.ThrowIfCancellationRequested();
                 string[] results = await Task.WhenAll([sayHello, sayWorld]);
+                stopwatch.Stop();
 
+                Console.WriteLine($"{results[0]}...{results[1]}");
+                Console.WriteLine(stopwatch.ElapsedMilliseconds);
             }
-            catch (Exception ex)
+            catch (OperationCanceledException ex)
             {
                 Console.WriteLine(ex);
             }
-            _cancelTasks.CancelAfter(5000);
+            finally
+            {
+                _cancelTasks.Dispose();
+            }
 
             /*private void DoStuff()
             {
@@ -51,10 +62,7 @@ internal class Program
 
             
 
-            stopwatch.Stop();
 
-            Console.WriteLine($"{results[0]}...{results[1]}");
-            Console.WriteLine(stopwatch.ElapsedMilliseconds);
 
 
         }
