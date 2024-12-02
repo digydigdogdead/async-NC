@@ -13,6 +13,7 @@ namespace ASync
         async public static Task<string> ReadFile(string path)
         {
             string result = await File.ReadAllTextAsync(path);
+            await Task.Delay(5000);
             return result;
         }
 

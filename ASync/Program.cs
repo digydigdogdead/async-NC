@@ -100,7 +100,47 @@ internal class Program
 
                 await Task.WhenAll([tellAStory, printFactorials]);*/
 
-        Console.WriteLine(ASyncFileManager.ReadFile("Resources/SuperSecretFile.txt").Result);
+
+
+        string encryptedContent = await ASyncFileManager.ReadFile("Resources/SuperSecretFile.txt");
+        Console.WriteLine(encryptedContent);
+
+        string result = "";
+        /*foreach (char c in encryptedContent)
+        {
+            if (c != ' ')
+            {
+                int i = c - 0;
+                i++;
+                result += (char)i;
+            }
+            else
+            {
+                result += c;
+            }
+        }*/
+
+        await Task.Run(() =>
+        {
+            foreach (char c in encryptedContent)
+            {
+                if (c != ' ')
+                {
+                    int i = c - 0;
+                    i++;
+                    result += (char)i;
+                }
+                else
+                {
+                    result += c;
+                }
+            }
+        });
+
+        ASyncFileManager.WriteFile("Resources/DecryptedMessage.txt", result);
+
+        string decryptedContent = ASyncFileManager.ReadFile("Resources/DecryptedMessage.txt").Result;
+        Console.WriteLine(decryptedContent);
 
 
 
