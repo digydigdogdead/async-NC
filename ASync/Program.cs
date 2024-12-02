@@ -1,12 +1,14 @@
 ﻿using ASync;
 using System.Diagnostics;
 using System.Numerics;
+using System.Runtime.CompilerServices;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 internal class Program
 {
     private static async Task Main(string[] args)
     {
-        async Task SayHelloAndWorld()
+        /*async Task SayHelloAndWorld()
         {
             var _cancelTasks = new CancellationTokenSource();
 
@@ -50,22 +52,80 @@ internal class Program
             {
                 _cancelTasks.Dispose();
             }
-        }
+        }*/
 
         //await SayHelloAndWorld();
 
         List<BigInteger> bigInts = Exercises.GetBigInts();
 
-        List<Task> allTasks = new List<Task>();
+        List<Task<BigInteger>> allTasks = new();
 
         foreach (BigInteger bigInt in bigInts)
         {
-            allTasks.Add(new Task(() =>
-            { BigInteger result = Exercises.CalculateFactorial(bigInt);
+            /*allTasks.Add(new Task(() =>
+            {
+                BigInteger result = Exercises
+                .CalculateFactorial(new BigInteger(24672));
+
                 Console.WriteLine(result);
+            }));*/
+            allTasks.Add(Task.Run(() =>
+            {
+                BigInteger result = Exercises
+                .CalculateFactorial(bigInt);
+
+                return result;
             }));
         }
 
-        await Task.Run(() => allTasks[0]);
+        /*static Task CalculateFactorialAsync(BigInteger bigInteger)
+        {
+            var result = Task.Run(() =>
+            {
+                Exercises.CalculateFactorial(bigInteger);
+            });
+            return result;
+        }
+
+
+        foreach (BigInteger bigInteger in bigInts)
+        {
+            var task1 = CalculateFactorialAsync(bigInteger);
+            
+        }*/
+
+
+
+        await Task
+            .WhenAll(allTasks)
+            .ContinueWith(x =>
+            {
+                foreach (BigInteger result in x.Result)
+                {
+                    Console.WriteLine(result);
+                }
+            });
+
+        /*foreach (var num in combined)
+        {
+            Console.WriteLine(num);
+        }*/
+        /*
+        await result1 = Exercises.CalculateFactorial(bigInts[0])
+        await result2 = ...
+
+        1-----
+        2-----
+        3-----
+        4---------
+        5---------
+        6----------------
+        7------------------------(<-)
+        8----------------
+        9---------
+        
+         */
+
+
     }
 }
